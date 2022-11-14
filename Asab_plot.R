@@ -1,3 +1,9 @@
+## Reproduce asab plots with dummy data
+## Written by: Reinoud Allaert, reinoud.alaert@ugent.be
+
+warning("THIS SCRIPT SOURCES A .tif file that needs manual downloading from:
+https://land.copernicus.eu/pan-european/corine-land-cover")
+
 # load and install all required packages
 if (!require("raster")) install.packages("raster")  
 if (!require("dplyr")) install.packages("dplyr")
@@ -23,6 +29,9 @@ setwd("~/Documents/Github/ASAB_plot")
 GPS_data <- read.csv("~/Documents/Github/ASAB_plot/dummy_gps_data.csv")
 
 ## corine land cover and legend
+
+#### DOWNLOAD CORINE FILE FROM:
+#### https://land.copernicus.eu/pan-european/corine-land-cover
 corine <- raster("corine_land_cover.tif")
 clc_legend <- read.csv("~/Documents/Github/ASAB_plot/clc_legend.csv")
 
