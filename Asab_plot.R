@@ -14,12 +14,16 @@ if (!require("rnaturalearth")) install.packages("rnaturalearth")
 if (!require("raster")) install.packages("raster")  
 if (!require("sp")) install.packages("sp") 
 if (!require("ggplot2")) install.packages("ggplot2") 
+if (!require("rgdal")) install.packages("rgdal") 
+if (!require("rnaturalearthdata")) install.packages("rnaturalearthdata") 
 require(raster)
 require(dplyr)
 require(suncalc)
 require(dbscan)
 require(geosphere)
 require(rnaturalearth)
+require(rnaturalearthdata)
+require(rgdal)
 require(sp)
 require(ggplot2)
 
@@ -69,11 +73,6 @@ GPS_data$Sun_height <- sun_calc$altitude
 
 GPS_data$day <- "day"
 GPS_data$day[GPS_data$Sun_height <= -0.17] <- "night"
-
-
-## average time between fixes for day/nighttime positions
-sum(GPS_data_day$delta)/nrow(GPS_data_day) 
-sum(GPS_data_night$delta)/nrow(GPS_data_night) 
 
 
 ## crude way of behaviour labeling
