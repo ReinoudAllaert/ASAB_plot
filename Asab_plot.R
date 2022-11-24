@@ -104,12 +104,11 @@ GPS_data$habitat[GPS_data$Corine_type >= 420 & GPS_data$Corine_type <= 522] <- "
 GPS_data$habitat[GPS_data$Corine_type == 523] <- "Marine"
 
 ## manually add colour
-GPS_data$colour <- "white"
-GPS_data$colour[GPS_data$habitat == "Urban"] <- "brown" 
-GPS_data$colour[GPS_data$habitat == "Agriculture"] <- "green" 
-GPS_data$colour[GPS_data$habitat == "Intertidal"] <- "cornsilk" 
-GPS_data$colour[GPS_data$habitat == "Marine"] <- "blue" 
-
+GPS_data$colour <- "#999999"
+GPS_data$colour[GPS_data$habitat == "Urban"] <- "#D55E00" 
+GPS_data$colour[GPS_data$habitat == "Agriculture"] <- "#009E73" 
+GPS_data$colour[GPS_data$habitat == "Intertidal"] <- "#E69F00" 
+GPS_data$colour[GPS_data$habitat == "Marine"] <- "#56B4E9" 
 
 GPS_data_day <- subset(GPS_data, (day == 'day'))
 GPS_data_night <- subset(GPS_data, (day == 'night'))
@@ -196,6 +195,21 @@ base <- ggplot() +
 
 base
 
+### plot with leaflet
+
+leaflet() %>%
+  addProviderTiles("CartoDB.Positron") %>%
+  setView(lng = 3.017036, lat = 51.022090, zoom = 8,5) %>%
+  addProviderTiles("Esri.WorldImagery", group = "Esri World Imagery")%>%
+  addCircleMarkers(data=random_bird,
+                   lat=~location.lat,
+                   lng=~location.long,
+                   color= ~colour,
+                   weight = 3,
+                   fill = TRUE,
+                   opacity = 0.7,
+                   fillOpacity = 0.7,
+                   radius = 2)
 
 ## days since start
 GPS_forage$date_diff <- as.Date(as.character(GPS_forage$timestamp))-
@@ -245,6 +259,7 @@ random_bird <- random_bird %>%
   summarise(Frequency = sum(delta))%>% 
   mutate(ID = unique(random_bird$colour_ring))
 
+
 freqs <- NULL
 for (date in unique(random_bird$date_diff)) { 
   temp <- random_bird %>% 
@@ -254,12 +269,14 @@ for (date in unique(random_bird$date_diff)) {
   
 }
 
+cbPalette <- c( "#009E73", "#E69F00" , "#56B4E9" , "#999999", "#D55E00" )
+
 ## plot over time
 ggplot(freqs, aes(x = date_diff, y = Frequency, fill = habitat)) +
   geom_col() +
   geom_text(aes(label = paste0(round(Frequency), "%")),
             position = position_stack(vjust = 0.5)) +
-  scale_fill_brewer(palette = "Set2") +
+  scale_fill_brewer(palette = cbPalette) +
   theme_minimal(base_size = 16) +
   ylab("Time spent foraging (%)") +
   xlab("Days since release (per 3)") + theme(axis.text.x=element_text(angle=90,hjust=1)) + ggtitle(freqs$ID) + theme(plot.title = element_text(hjust = 0.5))
