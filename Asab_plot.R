@@ -1,5 +1,5 @@
 ## Reproduce asab plots with dummy data
-## Written by: Reinoud Allaert, reinoud.alaert@ugent.be
+## Written by: Reinoud Allaert, reinoud.allaert@ugent.be
 
 warning("THIS SCRIPT SOURCES A .tif file that needs manual downloading from:
 https://land.copernicus.eu/pan-european/corine-land-cover")
